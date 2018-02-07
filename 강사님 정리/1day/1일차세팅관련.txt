@@ -2,11 +2,12 @@
  - nodejs.org 다운로드(LTS)
  - 설치간 경로는 짧게(취향)
 
-1-1 자료공ㅇ
+1-1 자료공유
  - http://192.168.30.2/
 
 2. IDE
  - jdk + eclipse Java EE + nodeclipse
+   (http://www.nodeclipse.org/updates/)
  - (Atom or vs Code) + plugin
 
 3. node module 검색
@@ -18,6 +19,36 @@
 
 5. DB
  - mysql (마리아DB) => 로컬, 아마존
+   create database nodedb;
  - tools (하이디sql)
- 
- 
+
+=======================================
+6. 프로젝트 생성
+ - 프로젝트 폴더 생성
+   mkdir myProc
+ - 프로젝트 폴더로 이동
+   cd  myProc
+ - nodejs 프로젝트 초기화
+   1) package.json 작성
+    혹은
+   2) npm init
+    -> 질문에 답하면서 package.json 생성
+   3) 1혹은 2가 끝난후 작업
+    -> npm install
+    -> package.json을 읽어서 모듈을 설치한다.
+   4) 코드 작성 (*.js)
+   5) npm start
+   6) 모듈추가
+    -> npm install --save mysql
+    -> --save:package.json에 
+       dependencies에 자동 추가및 설치
+    -> mysql : 최신
+       mysql@1.x.x : 1.x.x 버전 설치
+      
+   
+
+
+
+
+
+
