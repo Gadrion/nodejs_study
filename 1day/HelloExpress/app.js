@@ -56,6 +56,14 @@ app.get('/join', user.join);
 app.post('/join', user.joinProc);
 // INSERT INTO `nodedb`.`users` (`uid`, `upw`, `name`, `regdate`) VALUES ('ncia', '1', '양재', '2018-02-06 15:38:25');
 
+// 회원 정보 불러오기 : /selectUser/아이디 => 유저 정보를 뽑아서 수정 가능한 폼으로 세팅
+app.get('/selectUser/:uid', user.selectUser);
+// 수정은 비번 및 이름 수정 가능, 아이디를 보여주되 수정 불가
+app.put('/updateUser', user.updateUser);
+// 수정하는 URL : /updateUser, post
+
+// 삭제하는 URL : /deleteUser
+app.delete('/deleteUser', user.deleteUser);
 // express가 들어간다.
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

@@ -22,11 +22,11 @@ exports.loginEx = function( param, cb ) {
 };
 
 exports.join = function( param, cb ) {
-	pool.acquire((err, conn) =>{
+	pool.acquire((err, conn) => {
 		if( err ) {
 			cb( err, []);
 		} else {
-			var sql = "INSERT INTO `nodedb`.`users` (`uid`, `upw`, `name`, `regdate`) VALUES (?, ?, ?, '2018-02-06 15:38:25')";
+			var sql = "INSERT INTO `nodedb`.`users` (`uid`, `upw`, `name`) VALUES (?, ?, ?)";
 			conn.query(sql, [param.uid, param.upw, param.name], (err, results, fields) => {
 				// 커넥션 반납
 				pool.release(conn);
@@ -35,4 +35,36 @@ exports.join = function( param, cb ) {
 			});
 		}
 	})
-}
+};
+
+exports.selectUser = function( param, cb ) {
+	pool.acquire((err, conn) => {
+		if( err ) {
+			cb(err, []);
+		} else {
+			var sql = "select * from users where uid=?";
+			conn.query(sql, [param.uid], (err, results, fields) => {
+				// 커넥션 반납
+				pool.release(conn);
+				// 쿼리 결과 반납
+				cb( err, results );
+			})
+		}
+	})
+};
+
+exports.updateUser = function( param, cb ) {
+	pool.acquire((err, conn) => {
+		if( err ) {
+			cb(err, []);
+		} else {
+			var sql = "UPDATE users SET upw=?, name=? where uid=?;";
+			conn.query(sql, [param.upw, param.name, param.uid], (err, results, fields) => {
+				// 커넥션 반납
+				pool.release(conn);
+				// 쿼리 결과 반납
+				cb( err, results );
+			})
+		}
+	})
+};

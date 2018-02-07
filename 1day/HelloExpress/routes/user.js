@@ -41,27 +41,68 @@ exports.loginProc = function(req, res) {
 	});
 };
 
-// 회원가입 폼 페이지 처리
+// 회원가입 폼
 exports.join = function(req, res) {
 	res.render('joinForm', { name: '회원가입' });
 };
 
+// 회원가입 처리
 exports.joinProc = function(req, res) {
 	console.log( req.body );
 	
 	sql.join(req.body, (err, result)=>{
 		if( err ) {
-			res.send("<script>alert('join fail');history.back();</script>");
-			console.log('join fail11111111111111!!!!',err);
+			res.render('alert', { msg:'join fail', url:'back' });
 		} else {
-			if( result != null && result.length > 0 ) {
-//				res.send('join success : ' + req.body.name + '님 반갑습니다.');
-				console.log('join success!!!!');
-				res.render('index');
+			console.log('else',result);
+			if( result != null & result.affectedRows > 0 ) {
+				res.render('alert', { msg:req.body.name + '님 반갑습니다.', url:'/' });
 			} else {
-				res.send("<script>alert('join fail');history.back();</script>");
-				console.log('join fail2222222222222!!!!',err);
+				res.render('alert', { msg:'join fail', url:'back' });
 			}				
 		}
-	})
+	});
+};
+
+// 회원 불러오기
+// /selectUser/(uid)
+exports.selectUser = (req, res) => {
+	// get : req.query
+	// post : req.body
+	// 동적 파라미터 : req.params
+	console.log( req.params.uid );
+	
+	// 필요하면 파라미터를 가공하여 구조를 맞춘다.
+	sql.selectUser({ uid: req.params.uid }, (err, rows) => {
+		if( err ) {
+			res.render('alert', { msg: "회원 정보 불러오기 실패", url: "back" });
+		} else {
+			if( rows != null && rows.length > 0 )
+				res.render('updateForm', { title: "회원정보수정", user: rows[0] });
+			else
+				res.render('alert', { msg: "회원 정보 불러오기 실패", url: "back" });
+		}
+	});
+};
+
+exports.updateUser = (req, res) => {
+	console.log( req.body, req.method );
+//	res.send('ok');
+	sql.updateUser(req.body, (err, result) => {
+		if( err ) {
+			res.render('alert', { msg:'updateUser fail', url:'back' });
+		} else {
+			console.log('else',result);
+			if( result != null & result.affectedRows > 0 ) {
+				res.render('alert', { msg:req.body.name + '님 반갑습니다.', url:'/' });
+			} else {
+				res.render('alert', { msg:'updateUser fail', url:'back' });
+			}				
+		}
+	});
+};
+
+exports.deleteUser = (req, res) => {
+	console.log( req.body, req.method );
+	res.send('ok');
 };
