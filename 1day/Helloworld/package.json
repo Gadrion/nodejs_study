@@ -1,0 +1,22 @@
+{
+  "name": "Helloworld",
+  "version": "0.1.0",
+  "description": "Helloworld",
+  "main": "hello-world-server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified! Configure in package.json\" && exit 1"
+  },
+  "repository": "",
+  "dependencies": {
+    "generic-pool": "^2.5.4",
+    "mysql": "^2.15.0"
+  },
+  "keywords": [
+    "node.js",
+    "eclipse",
+    "nodeclipse"
+  ],
+  "author": "",
+  "license": "MIT",
+  "readmeFilename": "README.md"
+}

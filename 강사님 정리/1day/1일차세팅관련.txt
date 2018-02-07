@@ -1,0 +1,23 @@
+1. nodejs 세팅
+ - nodejs.org 다운로드(LTS)
+ - 설치간 경로는 짧게(취향)
+
+1-1 자료공ㅇ
+ - http://192.168.30.2/
+
+2. IDE
+ - jdk + eclipse Java EE + nodeclipse
+ - (Atom or vs Code) + plugin
+
+3. node module 검색
+ - http://node-modules.com/
+ - https://www.npmjs.com/
+
+4. 서버 구축
+ - 리눅스 기반(우분트 v16)
+
+5. DB
+ - mysql (마리아DB) => 로컬, 아마존
+ - tools (하이디sql)
+ 
+ 
