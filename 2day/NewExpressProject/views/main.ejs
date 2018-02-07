@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  	<meta charset="utf-8">
+    <title>메인서비스</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+    // 문서가 준비되었다. => html이 메모리에 로드 되었다. => DOM 완성되었다. => 문서 조작 가능한 타이밍
+	    $(document).ready(function(){
+	    	// alert('load complete');
+	    	// form 데이터 전송 이벤트
+	    	$('form').on('submit', (evt) => {
+	    		// 이벤트 종료
+	    		evt.preventDefault();
+	    		
+	    		// 전달 데이터의 파라미터 처리
+	    		console.log('->',$('form').serialize());
+	    		// 검색 진행
+	    		// get 방식 ajax 통신
+	    		$.get({
+	    			url:'/main/search',
+	    			data:$('form').serialize(),
+	    			dataType:'json',
+	    			success:function(data){
+	    				console.log('검색 성공 : ', data);
+	    				if(data.code === 0) {
+	    					alert('검색 결과 없음');
+	    					// 검색창 초기화
+	    					$('input[name=searchTeam]').val('');
+	    					return;
+	    				}
+	    				$('#searchResult').empty();
+	    				$.each(data.data, (idx, item) => {
+	    					console.log( idx, item );
+	    					var html = "<tr><td>" + item.rank + "</td>"+
+	    								"<td>" + item.name + "</td>" +
+	    								"<td>" + item.winPoint +"</td></tr>";  					
+	    					$('#searchResult').append(html);
+	    					/*
+	    					$('#searchResult>tr:last').on('click', (evt)=>{
+	    						alert(item.name);
+	    					})
+	    					*/
+	    				});
+	    				// 결과 화면 보이기
+	    				$('#searchFrame').css('display', 'block');
+	    			},
+	    			error:function(err){
+	    				alert('검색 실패: ' + err);
+	    			}
+	    		});
+	    		
+	    		$('#searchResult').on('click', 'tr', function() {
+	    			var name = $(this).find('td:nth-of-type(2)').text();
+	    			alert(name);
+	    		});
+	    		// 발생한 이벤트에 대한 반환 않함
+	    		return false;
+	    	});
+	    });
+    </script>
+  </head>
+  <body>
+  	<div id="search">
+  		<fieldset>
+  			<form action="#">
+	  			<input type="text" name="searchTeam" placeholder="팀 이름을 입력하고 검색" required/>
+	  			<button id="searchBtn">검색</button>
+  			</form>
+  			<table id="searchFrame" border="1" style="display:none;">
+  				<thead>
+  					<tr>
+  						<th>순위</th>
+	  					<th>팀명</th>
+	  					<th>승점</th>
+  					</tr>
+  				</thead>
+  				<tbody id="searchResult">
+  				</tbody>
+  			</table>
+  		</fieldset>
+  	</div>
+    <div id="wrap">
+    	<table summary="팀 순위" cellspacing="0" border="1">
+		    <caption>팀 순위</caption>
+		    <colgroup>
+		        <col width="45">
+		        <col width="*">
+		        <col width="80">
+		        <col width="80">
+		        <col width="80">
+		        <col width="80">
+		        <col width="80">
+		        <col width="80">
+		        <col width="80">
+		        <col width="80">
+		    </colgroup>
+		    <thead>
+		    <tr>
+		        <th scope="col">
+		            <div class="inner">
+		                <strong>순위</strong>
+		            </div>
+		        </th>
+		        <th scope="col" class="align_l">
+		            <div class="inner">
+		                <strong>팀</strong>
+		            </div>
+		        </th>
+		        <th scope="col">
+		            <div class="inner">
+		                <strong>경기수</strong>
+		            </div>
+		        </th>
+		        <!-- [D] 선택된 카테고리 활성화 강조 테두리 selected 클래스 추가 -->
+		        <th scope="col" class="selected">
+		            <a href="javascript:wfootballTeamRecordSortByColumn('gainPoint');" class="inner">
+		                <strong class="sort">승점</strong>
+		            </a>
+		        </th>
+		        <th scope="col">
+		            <a href="javascript:wfootballTeamRecordSortByColumn('won', 'lost', 'manyFew');" class="inner">
+		                <strong class="sort">승</strong>
+		            </a>
+		        </th>
+		        <th scope="col">
+		            <a href="javascript:wfootballTeamRecordSortByColumn('drawn', 'lost', 'manyFew');" class="inner">
+		                <strong class="sort">무</strong>
+		            </a>
+		        </th>
+		        <th scope="col">
+		            <a href="javascript:wfootballTeamRecordSortByColumn('lost', 'won', 'manyFew');" class="inner">
+		                <strong class="sort">패</strong>
+		            </a>
+		        </th>
+		        <th scope="col">
+		            <a href="javascript:wfootballTeamRecordSortByColumn('gainGoal', 'loseGoal', 'manyFew');" class="inner">
+		                <strong class="sort">득점</strong>
+		            </a>
+		        </th>
+		        <th scope="col">
+		            <a href="javascript:wfootballTeamRecordSortByColumn('loseGoal', 'gainGoal', 'manyFew');" class="inner">
+		                <strong class="sort">실점</strong>
+		            </a>
+		        </th>
+		        <th scope="col">
+		            <a href="javascript:wfootballTeamRecordSortByColumn('goalGap', 'gainGoal', 'manyMany');" class="inner">
+		                <strong class="sort">득실차</strong>
+		            </a>
+		        </th>
+		    </tr>
+		    </thead>
+		    <tbody>
+		    	<% for( team of data ){%>
+			    <tr>
+			        <!-- [D] 상위랭크는 best 클래스 추가 -->
+			        <td class="num ">
+			            <div class="inner relegation">
+			                <strong><%= team.rank %></strong>
+			            </div>
+			        </td>
+			        <td class="align_l">
+			            <div class="inner">
+			                <span class="name"><%= team.name %></span>
+			            </div>
+			        </td>
+			        <td>
+			            <div class="inner">
+			                <span><%= team.total %></span>
+			            </div>
+			        </td>
+			        <!-- [D] 선택된 카테고리 활성화 강조 테두리 selected 클래스 추가 -->
+			        <td class="selected">
+			            <div class="inner">
+			                <span><%= team.winPoint %></span>
+			            </div>
+			        </td>
+			        <td>
+			            <div class="inner">
+			                <span><%= team.win %></span>
+			            </div>
+			        </td>
+			        <td>
+			            <div class="inner">
+			                <span><%= team.draw %></span>
+			            </div>
+			        </td>
+			        <td>
+			            <div class="inner">
+			                <span><%= team.lose %></span>
+			            </div>
+			        </td>
+			        <td>
+			            <div class="inner">
+			                <span><%= team.goals %></span>
+			            </div>
+			        </td>
+			        <td>
+			            <div class="inner">
+			                <span><%= team.eat %></span>
+			            </div>
+			        </td>
+			        <td>
+			            <div class="inner">
+			                <span><%= team.diff %></span>
+			            </div>
+			        </td>
+			    </tr>
+		    	<% } %>
+		    </tbody>
+		</table>
+    </div>
+  </body>
+</html>
