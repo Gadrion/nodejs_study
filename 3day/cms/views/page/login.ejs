@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include ../common/head.ejs %>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="login-panel panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><%= title %></h3>
+                    </div>
+                    <div class="panel-body">
+                        <form role="form" action="/users/login" method="POST">
+                            <fieldset>
+                                <div class="form-group has-success">
+                                    <input class="form-control" placeholder="아이디" name="uid" type="text" autofocus>
+                                </div>
+                                <div class="form-group has-error">
+                                    <input class="form-control" placeholder="비밀번호" name="upw" type="password" value="">
+                                </div>
+                                <div class="checkbox">
+                                    <label>
+                                        <input name="remember" type="checkbox" value="Remember Me">아이디 저장
+                                    </label>
+                                </div>
+                                <!-- Change this to a button or input when using this as a form -->
+                                <button class="btn btn-lg btn-danger btn-block"><%= title %></button>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include ../common/foot.ejs %>
+</body>
+
+</html>

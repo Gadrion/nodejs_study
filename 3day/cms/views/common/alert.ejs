@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+    	alert("<%= msg %>");
+    	<% if( url === "back"){ %>
+    			history.back();
+    	<% } else { %>
+    			document.location.href="<%= url %>";
+    	<% } %>
+    </script>
+  </head>
+</html>
