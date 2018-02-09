@@ -23,16 +23,53 @@ var server = http.createServer(app);
 // 서버 소켓 생성
 var io = require('socket.io')(server);
 // 이벤트 등록
+var rooms = ["게임방", "드라마방", "운동방"];
 io.on('connection', function(socket){
-  console.log('클라이언트가 접속했다', socket);
-  // // 유저가 최초 채팅방에 진입하여 닉네임을 넣고 전송하는 이벤트
-  // socket.on('sendUserId', function(data){
+  // console.log('클라이언트가 접속했다', socket);
+  // 유저가 최초 채팅방에 진입하여 닉네임을 넣고 전송하는 이벤트
+  socket.on('sendUserId', user_id => {
+    console.log( "접속한 유저 ID : ", user_id);
+    // 아이디를 저장(기록) => 소켓
+    socket.user_id = user_id;
+    // 방정보를 기록 => 소켓
+    socket.room = rooms[0];
+    // 방에 입장(기본방을 무조건 지정한다 : 게임방)
+    socket.join( socket.room );
+    // 방송 (누가 입장하였습니다.) => 당사자는 빼고
+    socket.broadcast.to( socket.room ).emit("sendMsg", "관리자", socket.user_id + "님이 입장하였습니다.");
+    // 당사자한테 방에 입장했음을 알려준다 => 전체 방목록, 입장한 방 정보
+    socket.emit("sendMsg", "관리자", socket.user_id + "님이 입장하였습니다.");
+    socket.emit("sendRoomInfo", rooms, socket.room);
+  });
+  // 클라이언트가 퇴장(페이지가 닫히면) 호출
+  socket.on('disconnect', function(){
+    socket.broadcast.to( socket.room ).emit("sendMsg", "관리자", socket.user_id + "님이 퇴장하였습니다.");
+    socket.leave( socket.room );
+  });
 
-  // });
-  // // 클라이언트가 퇴장(페이지가 닫히면) 호출
-  // socket.on('disconnect', function(){
+  // 클라이언트가 메시지를 보냈다.
+  socket.on('userMsg', (msg) => {
+    // 전체 유저중 같은 방
+    io.sockets.in( socket.room ).emit("sendMsg", socket.user_id, msg);
+  });
+  // 방바꾸기
+  socket.on('changeRoom', (newRoom) => {
+    // 방을 빠져 나온다
+    socket.leave( socket.room );
+    // 기존방 멤버들에게 퇴장했음을 알린다.
+    socket.broadcast.to( socket.room ).emit("sendMsg", "관리자", socket.user_id + "님이 퇴장하였습니다.");
+    // 새로운 방에 들어가서 하는 절차 진행
 
-  // });
+    // 방정보를 기록 => 소켓
+    socket.room = newRoom;
+    // 방에 입장(기본방을 무조건 지정한다 : 게임방)
+    socket.join( socket.room );
+    // 방송 (누가 입장하였습니다.) => 당사자는 빼고
+    socket.broadcast.to( socket.room ).emit("sendMsg", "관리자", socket.user_id + "님이 입장하였습니다.");
+    // 당사자한테 방에 입장했음을 알려준다 => 전체 방목록, 입장한 방 정보
+    socket.emit("sendMsg", "관리자", socket.user_id + "님이 입장하였습니다.");
+    socket.emit("sendRoomInfo", rooms, socket.room);
+  });
 });
 /**
  * Listen on provided port, on all network interfaces.
