@@ -1,1 +1,0 @@
-sudo /usr/bin/forerver restart ./bin/www

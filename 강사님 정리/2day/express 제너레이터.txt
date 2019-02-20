@@ -1,9 +1,0 @@
-npm install -g express
-
-npm install -g express-generator
-
-express -h
-
-cd 원하는 위치 이동
-
-express -e 프로젝트명
