@@ -1,0 +1,13 @@
+{
+  "name": "study-express",
+  "version": "1.0.0",
+  "description": "just study Express",
+  "main": "index.js",
+  "repository": "https://github.com/Gadrion/nodejs_study.git",
+  "author": "gd <wjdrlehs57@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.4",
+    "mongoose": "^5.4.16"
+  }
+}
