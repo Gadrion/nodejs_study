@@ -1,0 +1,24 @@
+{
+  "name": "0.nodejs_study",
+  "version": "1.0.0",
+  "description": "just do it book study",
+  "main": "main.js",
+  "devDependencies": {
+    "moment": "^2.24.0",
+    "winston": "^3.2.1",
+    "winston-daily-rotate-file": "^3.8.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gadrion/nodejs_study.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Gadrion/nodejs_study/issues"
+  },
+  "homepage": "https://github.com/Gadrion/nodejs_study#readme"
+}
